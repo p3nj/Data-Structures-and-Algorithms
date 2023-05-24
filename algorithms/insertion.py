@@ -1,9 +1,8 @@
-
 def insert_option_a(arr, n, new_customers):
     if n < len(arr):
+        print()
         arr[n] = new_customers
         n += 1
-
     # else:
         # print("The array is already full")
 
@@ -21,8 +20,8 @@ def insert_option_b(arr, n, new_customer):
             j -= 1
         arr[i] = new_customer
         n += 1
-    else:
-        print("THe array is already full")
+    # else:
+        # print("THe array is already full")
     return arr, n
 
 

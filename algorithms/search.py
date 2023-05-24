@@ -11,7 +11,6 @@ def search_option_b(arr, n, customer):
     r = n - 1
     while i <= r:
         m = int((i+r) / 2)
-        print("Current Positions: {}".format(m))
         if arr[m] == customer:
             return m
         elif arr[m] > customer:

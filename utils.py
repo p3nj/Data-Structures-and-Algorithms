@@ -3,6 +3,10 @@ import os
 from datetime import datetime
 
 
+def sort_array(arr):
+    return sorted(arr, key=lambda x: (x is None, x))
+
+
 def array_length(arr):
     count = 0
     for i in arr:
@@ -18,6 +22,7 @@ def flatten(lst):
     if isinstance(lst[0], list):
         return flatten(lst[0]) + flatten(lst[1:])
     return [lst[0]] + flatten(lst[1:])
+
 
 # display headlines
 def headlines(content, char, end=True):
@@ -42,7 +47,7 @@ def fib(n):
 
 def create_result_dir(categories):
     timestamp = datetime.now().strftime("%Y-%m-%d")
-    directory = "{}_{}".format(timestamp, '/'.join(categories))
+    directory = "{}/{}".format(timestamp, '/'.join(categories))
 
     if not os.path.exists(directory):
         os.makedirs(directory)
