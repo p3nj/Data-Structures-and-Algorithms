@@ -51,17 +51,22 @@ def preload(reset):
 
 
 if '__main__' == __name__:
+    reset_data = False;
     parser = argparse.ArgumentParser(
         description='This little program demonstrated simple algorithm implemented as python.')
 
     parser.add_argument('-l', '--fibonacci-level',
                         help='set the level of fibonacci when generate data starts (def: 20)')
-    parser.add_argument('-s', '--sample-size', help='set the amount of samples should generated. (def: 5)')
-    parser.add_argument('-n', '--numbers', help='how many times you want to test the algorithms. (def: 10)')
-    parser.add_argument('-o', '--output', help='output report as csv inside YY-MM-DD directory.', action='store_true')
-    parser.add_argument('-r', '--reset', help='reset .bin files and regenerate a new one.', action='store_true')
+    parser.add_argument('-s', '--sample-size', help='Set the amount of samples should generated.\n'
+                                                    'Change this value will trigger reset (def: 5)')
+    parser.add_argument('-n', '--numbers', help='How many times you want to test the algorithms. (def: 10)')
+    parser.add_argument('-o', '--output', help='Output report as csv inside YY-MM-DD directory.', action='store_true')
+    parser.add_argument('-r', '--reset', help='Reset .bin files and regenerate a new one.\n'
+                                              'With this value will trigger reset', action='store_true')
     parser.add_argument('-v', '--verbose', help='noisy program', action='store_true')
     args = parser.parse_args()
+
+    args.reset = reset_data
 
     if args.verbose:
         logger.setLevel(logging.DEBUG)
@@ -69,8 +74,10 @@ if '__main__' == __name__:
 
     if args.sample_size:
         SAMPLE_SIZE = args.sample_size
+        reset_data = True
     if args.fibonacci_level:
         FIBONACCI_LEVEL = args.fibonacci_level
+        reset_data = True
     if args.numbers:
         TEST_ROUND = args.numbers
 
@@ -79,7 +86,7 @@ if '__main__' == __name__:
                 "Fibonacci Level: {}\n"
                 "Sample Size: {}\n"
                 "Test Rounds: {}\n"
-                "Output to CSV: {}".format(args.reset,
+                "Output to CSV: {}".format(reset_data,
                                            cfg.FIBONACCI_LEVEL,
                                            cfg.SAMPLE_SIZE,
                                            cfg.TEST_ROUND,
