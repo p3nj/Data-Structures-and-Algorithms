@@ -68,10 +68,6 @@ if '__main__' == __name__:
 
     args.reset = reset_data
 
-    if args.verbose:
-        logger.setLevel(logging.DEBUG)
-        logger.debug("DEBUG ENABLED!!! I WILL BE NOISY!!!")
-
     if args.sample_size:
         SAMPLE_SIZE = args.sample_size
         reset_data = True
@@ -81,16 +77,19 @@ if '__main__' == __name__:
     if args.numbers:
         TEST_ROUND = args.numbers
 
-    logger.info("\nArguments Loaded!!\n"
-                "Reset: {}\n"
-                "Fibonacci Level: {}\n"
-                "Sample Size: {}\n"
-                "Test Rounds: {}\n"
-                "Output to CSV: {}".format(reset_data,
-                                           cfg.FIBONACCI_LEVEL,
-                                           cfg.SAMPLE_SIZE,
-                                           cfg.TEST_ROUND,
-                                           args.output))
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+        logger.debug("DEBUG ENABLED!!! I WILL BE NOISY!!!")
+        logger.info("\nArguments Loaded!!\n"
+                    "Reset: {}\n"
+                    "Fibonacci Level: {}\n"
+                    "Sample Size: {}\n"
+                    "Test Rounds: {}\n"
+                    "Output to CSV: {}".format(reset_data,
+                                               cfg.FIBONACCI_LEVEL,
+                                               cfg.SAMPLE_SIZE,
+                                               cfg.TEST_ROUND,
+                                               args.output))
 
     time.sleep(1)
     print("Press any key to continue...")
