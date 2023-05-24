@@ -23,7 +23,7 @@ def preload(reset):
     if os.path.exists(cfg.PROBLEM_SIZE_FILE) is not True:
         # Preset problem sizes using fibonacci algorithm
         logging.debug("Generating mock data using fibonacci")
-        for i in [fib(j + FIBONACCI_LEVEL) for j in range(SAMPLE_SIZE)]:
+        for i in [fib(j + cfg.FIBONACCI_LEVEL) for j in range(cfg.SAMPLE_SIZE)]:
             problems_lst.append(mock.rand_name(i))
         logging.debug("Save the problem size file as {}".format(cfg.PROBLEM_SIZE_FILE))
         with open(cfg.PROBLEM_SIZE_FILE, "wb") as f:
@@ -96,5 +96,5 @@ if '__main__' == __name__:
     print("Press any key to continue...")
     input()
 
-    problem_lst, database_lst = preload(args.reset)
+    problem_lst, database_lst = preload(reset_data)
     simulation(database_lst, problem_lst, cfg.TEST_ROUND, args.output)
