@@ -33,7 +33,7 @@ def simulation(database_lst, problem_lst, test_rounds, output):
                 data_length = array_length(i)
                 elapsed_time = 0
                 for count in range(test_rounds):
-                    logger.info("[{}] Insertion {}".format(count, solution))
+                    logger.info("[{}] Insertion {} PS:{} DBS:{}".format(count, solution, len(j), len(i)))
                     if solution == solutions[0]:
                         t.Timer.stopwatch(t.Timer(True, "PS:{}, DBS:{}".format(len(j), len(i))))
                         for k in j:
@@ -54,7 +54,7 @@ def simulation(database_lst, problem_lst, test_rounds, output):
                 # Search
                 # Pick names from database
                 for count in range(test_rounds):
-                    logger.info("[{}] Search {}".format(count, solution))
+                    logger.info("[{}] Search {} PS:{}, DBS:{}".format(count, solution, len(j), len(i)))
                     search_list = {
                         'GOOD': mock.rand_name(5),
                         'BAD': choices(i[0:data_length], k=5)
@@ -85,35 +85,38 @@ def simulation(database_lst, problem_lst, test_rounds, output):
                                                        str("{:.5f}".format(elapsed_time / test_rounds))])
 
                 # Delete
-                # Pick names from database
-                delete_list = {
-                    'BAD': mock.rand_name(5),
-                    'GOOD': choices(i[0:data_length], k=5)
-                }
+                for count in range(test_rounds):
+                    logger.info("[{}] Delete {} PS:{}, DBS:{}".format(count, solution, len(j), len(i)))
 
-                for key in delete_list.keys():
-                    elapsed_time = 0
-                    if solution == solutions[0]:
-                        for count, item in enumerate(delete_list[key]):
-                            t.Timer.stopwatch(t.Timer(True, "[{}]. Delete {} ".format(count, item)))
-                            delete, data_length = delete_option_a(i, data_length, item)
-                            result = t.Timer.stopwatch(t.Timer(False))
-                            elapsed_time += result
-                        res_rows['Delete'].append([str(len(j)), str(len(i)),
-                                                   str(item),
-                                                   key,
-                                                   str("{:.5f}".format(elapsed_time / test_rounds))])
-                    else:
-                        total_result_time = 0
-                        for count, item in enumerate(delete_list[key]):
-                            t.Timer.stopwatch(t.Timer(True, "[{}]. Delete {} ".format(count, item)))
-                            delete, data_length = delete_option_b(sort_array(i), data_length, item)
-                            result = t.Timer.stopwatch(t.Timer(False))
-                            elapsed_time += result
-                        res_rows['Delete'].append([str(len(j)), str(len(i)),
-                                                   str(item),
-                                                   key,
-                                                   str("{:.5f}".format(elapsed_time / test_rounds))])
+                    # Pick names from database
+                    delete_list = {
+                        'BAD': mock.rand_name(5),
+                        'GOOD': choices(i[0:data_length], k=5)
+                    }
+
+                    for key in delete_list.keys():
+                        elapsed_time = 0
+                        if solution == solutions[0]:
+                            for count, item in enumerate(delete_list[key]):
+                                t.Timer.stopwatch(t.Timer(True, "[{}]. Delete {} ".format(count, item)))
+                                delete, data_length = delete_option_a(i, data_length, item)
+                                result = t.Timer.stopwatch(t.Timer(False))
+                                elapsed_time += result
+                            res_rows['Delete'].append([str(len(j)), str(len(i)),
+                                                       str(item),
+                                                       key,
+                                                       str("{:.5f}".format(elapsed_time / test_rounds))])
+                        else:
+                            total_result_time = 0
+                            for count, item in enumerate(delete_list[key]):
+                                t.Timer.stopwatch(t.Timer(True, "[{}]. Delete {} ".format(count, item)))
+                                delete, data_length = delete_option_b(sort_array(i), data_length, item)
+                                result = t.Timer.stopwatch(t.Timer(False))
+                                elapsed_time += result
+                            res_rows['Delete'].append([str(len(j)), str(len(i)),
+                                                       str(item),
+                                                       key,
+                                                       str("{:.5f}".format(elapsed_time / test_rounds))])
 
                 i = [None for _ in i]
 
