@@ -150,6 +150,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/2023-05-24/OptionB/Delete/18-24-52_OptionB_Delete_5.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/2023-05-24/OptionB/Delete/20-13-23_OptionB_Delete_9.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/2023-05-24/OptionB/Insertion/17-07-15_OptionB_Insertion_2.csv">
           <value>
             <Attribute>
@@ -158,6 +172,13 @@
           </value>
         </entry>
         <entry key="/2023-05-24/OptionB/Insertion/17-07-15_OptionB_Insertion_4.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/2023-05-24/OptionB/Search/20-13-23_OptionB_Search_5.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

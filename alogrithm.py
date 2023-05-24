@@ -8,14 +8,14 @@ from lib import rand_names as mock
 from utils import headlines, array_length, sort_array
 from lib.datatable import DataTable
 from lib import timer as t
+from lib.logger import mylogger as logger
 
 solutions = ["OptionA", "OptionB"]
 
 res_headers = {
     'Insertion': ["Problem Size", "Database Size", "Database Usage", "%", "Elapsed (ms)"],
-    'Search': ["Customer Size", "Database Size", "Search Keyword", "Found", "Elapsed (ms)"],
-    'Delete': ["Customer Size", "Database Size", "Delete Keyword", "Delete", "Elapsed (ms)"],
-}
+    'Search': ["Customer Size", "Database Size", "Search Keyword", "Type", "Elapsed (ms)"],
+    'Delete': ["Customer Size", "Database Size", "Delete Keyword", "Type", "Elapsed (ms)"],}
 res_rows = {'Insertion': [],
             'Search': [],
             'Delete': []}
@@ -25,80 +25,95 @@ total_results = {'Insertion': [],
 
 
 def simulation(database_lst, problem_lst, test_rounds, output):
-    # Option A
-    # Insertion
-    headlines("Insertion", '#')
+    logger.info("Simulation started...")
     for solution in solutions:
-        headlines("Benchmarking {}".format(solution), '-')
+        logger.info("Benchmarking {}".format(solution))
         for i in database_lst:
             for j in problem_lst:
                 data_length = array_length(i)
-                # Insertion
-                if solution == solutions[0]:
-                    t.Timer.stopwatch(t.Timer(True, "PS:{}, DBS:{}".format(len(j), len(i))))
-                    for k in j:
-                        i, data_length = insert_option_a(i, data_length, k)
-                    elapsed_time = t.Timer.stopwatch(t.Timer(False))
+                elapsed_time = 0
+                for count in range(test_rounds):
+                    logger.info("[{}] Insertion {}".format(count, solution))
+                    if solution == solutions[0]:
+                        t.Timer.stopwatch(t.Timer(True, "PS:{}, DBS:{}".format(len(j), len(i))))
+                        for k in j:
+                            i, data_length = insert_option_a(i, data_length, k)
+                        elapsed_time += t.Timer.stopwatch(t.Timer(False))
 
-                else:
-                    t.Timer.stopwatch(t.Timer(True, "PS:{}, DBS:{}".format(len(j), len(i))))
-                    for k in j:
-                        i, data_length = insert_option_b(i, data_length, k)
-                    elapsed_time = t.Timer.stopwatch(t.Timer(False))
+                    else:
+                        t.Timer.stopwatch(t.Timer(True, "PS:{}, DBS:{}".format(len(j), len(i))))
+                        for k in j:
+                            i, data_length = insert_option_b(i, data_length, k)
+                        elapsed_time += t.Timer.stopwatch(t.Timer(False))
 
                 res_rows['Insertion'].append([str(len(j)), str(len(i)),
                                               str(array_length(i)) + '/' + str(len(i)),
                                               str("{:.2f}".format(((array_length(i) / len(i)) * 100))),
-                                              str("{:.5f}".format(elapsed_time))])
+                                              str("{:.5f}".format(elapsed_time / test_rounds))])
 
                 # Search
                 # Pick names from database
-                name_list = mock.rand_name(5)
-                name_list += choices(i[0:data_length], k=5)
+                for count in range(test_rounds):
+                    logger.info("[{}] Search {}".format(count, solution))
+                    search_list = {
+                        'GOOD': mock.rand_name(5),
+                        'BAD': choices(i[0:data_length], k=5)
+                    }
 
-                if solution == solutions[0]:
-                    for k in name_list:
-                        t.Timer.stopwatch(t.Timer(True, "PS:{}, DBS:{}".format(len(j), len(i))))
-                        found = search_option_a(i, k)
-                        result = t.Timer.stopwatch(t.Timer(False))
-                        res_rows['Search'].append([str(len(j)), str(len(i)),
-                                                   str(k),
-                                                   found > 0,
-                                                   str("{:.5f}".format(result))])
-                else:
-                    for k in name_list:
-                        t.Timer.stopwatch(t.Timer(True, "PS:{}, DBS:{}".format(len(j), len(i))))
-                        found = search_option_b(sort_array(i), data_length, k)
-                        result = t.Timer.stopwatch(t.Timer(False))
-                        res_rows['Search'].append([str(len(j)), str(len(i)),
-                                                   str(k),
-                                                   found > 0,
-                                                   str("{:.5f}".format(result))])
+                    for key in search_list.keys():
+                        elapsed_time = 0
+                        if solution == solutions[0]:
+                            for k in search_list[key]:
+                                t.Timer.stopwatch(t.Timer(True, "PS:{}, DBS:{}".format(len(j), len(i))))
+                                search_option_a(i, k)
+                                result = t.Timer.stopwatch(t.Timer(False))
+                                elapsed_time += result
 
-
+                            res_rows['Search'].append([str(len(j)), str(len(i)),
+                                                       str(k),
+                                                       key,
+                                                       str("{:.5f}".format(elapsed_time / test_rounds))])
+                        else:
+                            for k in search_list[key]:
+                                t.Timer.stopwatch(t.Timer(True, "PS:{}, DBS:{}".format(len(j), len(i))))
+                                search_option_b(sort_array(i), data_length, k)
+                                result = t.Timer.stopwatch(t.Timer(False))
+                                elapsed_time += result
+                            res_rows['Search'].append([str(len(j)), str(len(i)),
+                                                       str(k),
+                                                       key,
+                                                       str("{:.5f}".format(elapsed_time / test_rounds))])
 
                 # Delete
                 # Pick names from database
-                name_list = mock.rand_name(5)
-                name_list += choices(i[0:data_length], k=5)
-                if solution == solutions[0]:
-                    for count, item in enumerate(name_list):
-                        t.Timer.stopwatch(t.Timer(True, "[{}]. Delete {} ".format(count, item)))
-                        delete, data_length = delete_option_a(i, data_length, item)
-                        result = t.Timer.stopwatch(t.Timer(False))
+                delete_list = {
+                    'BAD': mock.rand_name(5),
+                    'GOOD': choices(i[0:data_length], k=5)
+                }
+
+                for key in delete_list.keys():
+                    elapsed_time = 0
+                    if solution == solutions[0]:
+                        for count, item in enumerate(delete_list[key]):
+                            t.Timer.stopwatch(t.Timer(True, "[{}]. Delete {} ".format(count, item)))
+                            delete, data_length = delete_option_a(i, data_length, item)
+                            result = t.Timer.stopwatch(t.Timer(False))
+                            elapsed_time += result
                         res_rows['Delete'].append([str(len(j)), str(len(i)),
                                                    str(item),
-                                                   delete == 0,
-                                                   str("{:.5f}".format(result))])
-                else:
-                    for count, item in enumerate(name_list):
-                        t.Timer.stopwatch(t.Timer(True, "[{}]. Delete {} ".format(count, item)))
-                        delete, data_length = delete_option_b(sort_array(i), data_length, item)
-                        result = t.Timer.stopwatch(t.Timer(False))
+                                                   key,
+                                                   str("{:.5f}".format(elapsed_time / test_rounds))])
+                    else:
+                        total_result_time = 0
+                        for count, item in enumerate(delete_list[key]):
+                            t.Timer.stopwatch(t.Timer(True, "[{}]. Delete {} ".format(count, item)))
+                            delete, data_length = delete_option_b(sort_array(i), data_length, item)
+                            result = t.Timer.stopwatch(t.Timer(False))
+                            elapsed_time += result
                         res_rows['Delete'].append([str(len(j)), str(len(i)),
                                                    str(item),
-                                                   delete == 0,
-                                                   str("{:.5f}".format(result))])
+                                                   key,
+                                                   str("{:.5f}".format(elapsed_time / test_rounds))])
 
                 i = [None for _ in i]
 
@@ -117,5 +132,6 @@ def export_report(solution, results, headers, output):
             table.build(headers[i], j)
             if output:
                 table.save("{}_{}_{}".format(solution, i, count))
+
             else:
                 table.print()

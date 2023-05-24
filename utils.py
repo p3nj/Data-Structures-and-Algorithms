@@ -46,7 +46,7 @@ def fib(n):
 
 
 def create_result_dir(categories):
-    timestamp = datetime.now().strftime("%Y-%m-%d")
+    timestamp = datetime.now().strftime("%d-%m-%y")
     directory = "{}/{}".format(timestamp, '/'.join(categories))
 
     if not os.path.exists(directory):

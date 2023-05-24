@@ -1,43 +1,51 @@
 import argparse
+import logging
 import os
 import pickle
+import time
 
 from alogrithm import simulation
 from lib import rand_names as mock
-from lib import timer as t
-from utils import headlines, fib, array_length, flatten
-
-PROBLEM_SIZE_FILE = "prob_sizes.bin"
-DATABASE_SIZE_FILE = "databases.bin"
-TEST_ROUND = 10
+from lib.logger import mylogger as logger
+from utils import fib
+from config import Config as cfg
 
 
 def preload(reset):
     problems_lst = []
     databases_lst = []
     if reset is True:
-        os.remove(PROBLEM_SIZE_FILE)
-        os.remove(DATABASE_SIZE_FILE)
+        logging.debug("Delete Problem size bin file")
+        os.remove(cfg.PROBLEM_SIZE_FILE)
+        logging.debug("Delete Database size bin file")
+        os.remove(cfg.DATABASE_SIZE_FILE)
 
-    if os.path.exists(PROBLEM_SIZE_FILE) is not True:
+    if os.path.exists(cfg.PROBLEM_SIZE_FILE) is not True:
         # Preset problem sizes using fibonacci algorithm
-        for i in [fib(j + 20) for j in range(5)]:
+        logging.debug("Generating mock data using fibonacci")
+        for i in [fib(j + FIBONACCI_LEVEL) for j in range(SAMPLE_SIZE)]:
             problems_lst.append(mock.rand_name(i))
-        with open(PROBLEM_SIZE_FILE, "wb") as f:
+        logging.debug("Save the problem size file as {}".format(cfg.PROBLEM_SIZE_FILE))
+        with open(cfg.PROBLEM_SIZE_FILE, "wb") as f:
             pickle.dump(problems_lst, f)
     else:
-        with open(PROBLEM_SIZE_FILE, "rb") as f:
+        logging.debug("Loading the problem size file from {}".format(cfg.PROBLEM_SIZE_FILE))
+        with open(cfg.PROBLEM_SIZE_FILE, "rb") as f:
             problems_lst = pickle.load(f)
 
-    if os.path.exists(DATABASE_SIZE_FILE) is not True:
+    if os.path.exists(cfg.DATABASE_SIZE_FILE) is not True:
         # Preset database sizes using fibonacci algorithm
-        db_set = ([None] * fib(i + 20) for i in range(5))
+        logging.debug("Generating mock data using fibonacci")
+        db_set = ([None] * fib(i + FIBONACCI_LEVEL) for i in range(SAMPLE_SIZE))
         databases_lst = [*db_set]
-        with open(DATABASE_SIZE_FILE, "wb") as f:
+        logging.debug("Save the database size file as {}".format(cfg.PROBLEM_SIZE_FILE))
+        with open(cfg.DATABASE_SIZE_FILE, "wb") as f:
             pickle.dump(databases_lst, f)
     else:
-        with open(DATABASE_SIZE_FILE, "rb") as f:
+        logging.debug("Loading the Database size file from {}".format(cfg.PROBLEM_SIZE_FILE))
+        with open(cfg.DATABASE_SIZE_FILE, "rb") as f:
             databases_lst = pickle.load(f)
+            logging.debug("File loaded... data length: {}".format(len(databases_lst)))
 
     return problems_lst, databases_lst
 
@@ -46,9 +54,40 @@ if '__main__' == __name__:
     parser = argparse.ArgumentParser(
         description='This little program demonstrated simple algorithm implemented as python.')
 
+    parser.add_argument('-l', '--fibonacci-level',
+                        help='set the level of fibonacci when generate data starts (def: 20)')
+    parser.add_argument('-s', '--sample-size', help='set the amount of samples should generated. (def: 5)')
+    parser.add_argument('-n', '--numbers', help='how many times you want to test the algorithms. (def: 10)')
     parser.add_argument('-o', '--output', help='output report as csv inside YY-MM-DD directory.', action='store_true')
     parser.add_argument('-r', '--reset', help='reset .bin files and regenerate a new one.', action='store_true')
+    parser.add_argument('-v', '--verbose', help='noisy program', action='store_true')
     args = parser.parse_args()
 
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+        logger.debug("DEBUG ENABLED!!! I WILL BE NOISY!!!")
+
+    if args.sample_size:
+        SAMPLE_SIZE = args.sample_size
+    if args.fibonacci_level:
+        FIBONACCI_LEVEL = args.fibonacci_level
+    if args.numbers:
+        TEST_ROUND = args.numbers
+
+    logger.info("\nArguments Loaded!!\n"
+                "Reset: {}\n"
+                "Fibonacci Level: {}\n"
+                "Sample Size: {}\n"
+                "Test Rounds: {}\n"
+                "Output to CSV: {}".format(args.reset,
+                                           cfg.FIBONACCI_LEVEL,
+                                           cfg.SAMPLE_SIZE,
+                                           cfg.TEST_ROUND,
+                                           args.output))
+
+    time.sleep(1)
+    print("Press any key to continue...")
+    input()
+
     problem_lst, database_lst = preload(args.reset)
-    simulation(database_lst, problem_lst, TEST_ROUND, args.output)
+    simulation(database_lst, problem_lst, cfg.TEST_ROUND, args.output)
