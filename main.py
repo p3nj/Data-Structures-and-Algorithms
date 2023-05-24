@@ -36,7 +36,7 @@ def preload(reset):
     if os.path.exists(cfg.DATABASE_SIZE_FILE) is not True:
         # Preset database sizes using fibonacci algorithm
         logging.debug("Generating mock data using fibonacci")
-        db_set = ([None] * fib(i + FIBONACCI_LEVEL) for i in range(SAMPLE_SIZE))
+        db_set = ([None] * fib(i + cfg.FIBONACCI_LEVEL) for i in range(cfg.SAMPLE_SIZE))
         databases_lst = [*db_set]
         logging.debug("Save the database size file as {}".format(cfg.PROBLEM_SIZE_FILE))
         with open(cfg.DATABASE_SIZE_FILE, "wb") as f:
@@ -51,7 +51,7 @@ def preload(reset):
 
 
 if '__main__' == __name__:
-    reset_data = False;
+    reset_data = False
     parser = argparse.ArgumentParser(
         description='This little program demonstrated simple algorithm implemented as python.')
 
