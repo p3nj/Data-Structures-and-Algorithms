@@ -3,7 +3,8 @@ def delete_option_a(arr, n, customer):
     while i < len(arr) and arr[i] != customer:
         i += 1
     if i == len(arr):
-        print("This customer is not in the array")
+        return -1
+        #print("This customer is not in the array")
     else:
         while i < len(arr) - 2:
             arr[i] = arr[i+1]
@@ -24,5 +25,6 @@ def delete_option_b(arr, n, customer):
             r = m - 1
         else:
             i = m + 1
-    print("This customer is not in the array")
+    return -1
+    #print("This customer is not in the array")
 

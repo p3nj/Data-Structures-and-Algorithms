@@ -7,8 +7,7 @@ class Timer:
         self.toggle = toggle
         self.name = name
 
-    def stopwatch(self):
-
+    def stopwatch(self, silent=True):
         def mark_start():
             global start_time
             start_time = time.perf_counter()
@@ -19,7 +18,12 @@ class Timer:
 
         if self.toggle:
             mark_start()
-            headlines("{}...".format(self.name), '=')
+            if silent is not True:
+                headlines("{}...".format(self.name), '=', end=False)
+            return None
+
         else:
             mark_stop()
-            headlines("Elapsed: {} Seconds".format(stop_time - start_time), '-')
+            if silent is not True:
+                headlines("Elapsed: {} Seconds".format(stop_time - start_time), '=', end=True)
+            return stop_time - start_time

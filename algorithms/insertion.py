@@ -4,8 +4,8 @@ def insert_option_a(arr, n, new_customers):
         arr[n] = new_customers
         n += 1
 
-    else:
-        print("The array is already full")
+    # else:
+        # print("The array is already full")
 
     return arr, n
 
