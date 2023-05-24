@@ -4,7 +4,7 @@ from lib.logger import mylogger as logger
 def search_option_a(arr, customer):
     logger.debug("[OptionA - Search] - {}, {}".format(len(arr), customer))
     for i in range(len(arr)):
-        logger.debug("Looping through whole database")
+        logger.debug("Looping through whole database {} / {}".format(i, len(arr)))
         if arr[i] == customer:
             logger.debug("We have a hit! arr[{}] == {}".format(i, customer))
             return i
