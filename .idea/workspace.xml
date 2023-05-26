@@ -5,19 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="838370f3-17aa-44f9-9e30-db46f4187c04" name="Changes" comment="fix delete doesn't show and add more logging message details">
-      <change afterPath="$PROJECT_DIR$/26-05-23/OptionA/Delete/13-56-22_OptionA_Delete_0.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/26-05-23/OptionA/Insertion/13-56-22_OptionA_Insertion_0.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/26-05-23/OptionA/Search/13-56-22_OptionA_Search_0.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/26-05-23/OptionB/Delete/14-16-08_OptionB_Delete_0.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/26-05-23/OptionB/Insertion/14-16-08_OptionB_Insertion_0.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/26-05-23/OptionB/Search/14-16-08_OptionB_Search_0.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/databases.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prob_sizes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms/delete.py" beforeDir="false" afterPath="$PROJECT_DIR$/algorithms/delete.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms/insertion.py" beforeDir="false" afterPath="$PROJECT_DIR$/algorithms/insertion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alogrithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/alogrithm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
