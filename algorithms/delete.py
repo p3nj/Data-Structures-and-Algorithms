@@ -1,4 +1,3 @@
-from config import Config as cfg
 from lib.logger import mylogger as logger
 
 

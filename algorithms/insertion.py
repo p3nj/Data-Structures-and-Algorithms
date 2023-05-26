@@ -32,8 +32,7 @@ def insert_option_b(arr, n, new_customer):
         logger.debug("n + 1")
         n += 1
     else:
+        # print("The Array Is Already Full")
         logger.debug("The Array Is Already Full.")
 
     return arr, n
-
-

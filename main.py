@@ -15,10 +15,12 @@ def preload(reset):
     problems_lst = []
     databases_lst = []
     if reset is True:
-        logging.debug("Delete Problem size bin file")
-        os.remove(cfg.PROBLEM_SIZE_FILE)
-        logging.debug("Delete Database size bin file")
-        os.remove(cfg.DATABASE_SIZE_FILE)
+        if os.path.exists(cfg.PROBLEM_SIZE_FILE):
+            logging.debug("Delete Problem size bin file")
+            os.remove(cfg.PROBLEM_SIZE_FILE)
+        if os.path.exists(cfg.DATABASE_SIZE_FILE):
+            logging.debug("Delete Database size bin file")
+            os.remove(cfg.DATABASE_SIZE_FILE)
 
     if os.path.exists(cfg.PROBLEM_SIZE_FILE) is not True:
         # Preset problem sizes using fibonacci algorithm
@@ -69,27 +71,28 @@ if '__main__' == __name__:
     args.reset = reset_data
 
     if args.sample_size:
-        SAMPLE_SIZE = args.sample_size
+        cfg.SAMPLE_SIZE = int(args.sample_size)
         reset_data = True
     if args.fibonacci_level:
-        FIBONACCI_LEVEL = args.fibonacci_level
+        cfg.FIBONACCI_LEVEL = int(args.fibonacci_level)
         reset_data = True
     if args.numbers:
-        TEST_ROUND = args.numbers
+        cfg.TEST_ROUND = int(args.numbers)
 
     if args.verbose:
         logger.setLevel(logging.DEBUG)
         logger.debug("DEBUG ENABLED!!! I WILL BE NOISY!!!")
-        logger.info("\nArguments Loaded!!\n"
-                    "Reset: {}\n"
-                    "Fibonacci Level: {}\n"
-                    "Sample Size: {}\n"
-                    "Test Rounds: {}\n"
-                    "Output to CSV: {}".format(reset_data,
-                                               cfg.FIBONACCI_LEVEL,
-                                               cfg.SAMPLE_SIZE,
-                                               cfg.TEST_ROUND,
-                                               args.output))
+
+    logger.info("\nArguments Loaded!!\n"
+                "Reset: {}\n"
+                "Fibonacci Level: {}\n"
+                "Sample Size: {}\n"
+                "Test Rounds: {}\n"
+                "Output to CSV: {}".format(reset_data,
+                                           cfg.FIBONACCI_LEVEL,
+                                           cfg.SAMPLE_SIZE,
+                                           cfg.TEST_ROUND,
+                                           args.output))
 
     time.sleep(1)
     print("Press any key to continue...")
